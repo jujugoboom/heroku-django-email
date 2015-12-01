@@ -14,7 +14,7 @@ def index(request):
     return HttpResponse("OK")
 
 def recieve_email(request):
-    print(json.dumps(request.body))
+    print(json.dump(request.body))
     print('NEW MESSAGE')
     if request.method == 'POST':
         print("CREATING MESSAGE")
