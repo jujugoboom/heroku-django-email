@@ -1,1 +1,1 @@
-web:
+web: gunicorn email_webapp.wsgi --log-file -
