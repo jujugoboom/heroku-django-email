@@ -3,11 +3,11 @@ from django.shortcuts import render
 import hashlib, hmac
 import tinys3
 import json
-from .models import *
+#from .models import *
 
 S3_ACCESS_KEY = 'AKIAJPA62PHGYTEYJSXA'
 S3_SECRET_KEY = 'fnZzvVdXCmKypTjGyJJaaBPVGLcmBLy77pNJP/Yc'
-API_KEY = 'f5fe8fa67f3fdb15a4a5a7f3788c5acb'
+API_KEY = str.encode('f5fe8fa67f3fdb15a4a5a7f3788c5acb')
 # Create your views here.
 
 def index(request):
