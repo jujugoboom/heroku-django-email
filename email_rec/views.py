@@ -15,8 +15,6 @@ def index(request):
 def recieve_email(request):
     print('NEW MESSAGE')
     if request.method == 'POST':
-        print('NEW POST... CREATING MESSAGE OBJECT')
-        recieve_email(request)
         print("CREATING MESSAGE")
         email = Message()
         print("MESSAGE CREATED")
