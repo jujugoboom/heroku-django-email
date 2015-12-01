@@ -13,6 +13,7 @@ def index(request):
     return HttpResponse("OK")
 
 def recieve_email(request):
+    print(request.body)
     print('NEW MESSAGE')
     if request.method == 'POST':
         print("CREATING MESSAGE")
