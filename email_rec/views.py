@@ -7,7 +7,7 @@ from .models import *
 
 S3_ACCESS_KEY = 'AKIAJPA62PHGYTEYJSXA'
 S3_SECRET_KEY = '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'
-API_KEY = str.encode('f5fe8fa67f3fdb15a4a5a7f3788c5acb')
+API_KEY = str('key-f5fe8fa67f3fdb15a4a5a7f3788c5acb').encode()
 # Create your views here.
 
 def index(request):
@@ -56,5 +56,5 @@ def recieve_email(request):
 def verify(api_key, token, timestamp, signature):
     return signature == hmac.new(
                              key=api_key,
-                             msg='{}{}'.format(timestamp, token),
+                             msg='{}{}'.format(timestamp, token).encode(),
                              digestmod=hashlib.sha256).hexdigest()
