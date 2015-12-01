@@ -22,13 +22,13 @@ def recieve_email(request):
         email = Message()
         print("MESSAGE CREATED")
         email.sender = request.POST.get('sender')
-        print("ADDED SENDER")
+        print(email.sender)
         email.recipient = request.POST.get('recipient')
-        print("ADDED RECIPIENT")
+        print(email.recipient)
         email.subject = request.POST.get('subject', '')
-        print("ADDED SUBJECT")
+        print(email.subject)
         email.message = request.POST.get('body-plain', '')
-        print("ADDED MESSAGE")
+        print(email.message)
         attachments = ''
         print("ADDING ATTACHMENTS")
         if len(request.FILES.keys()) > 0:
@@ -41,9 +41,9 @@ def recieve_email(request):
                 attachments += f.name + ', '
                 conn.upload(f.name,f,'my_bucket')
         email.attachments = attachments
-        print("ADDED ATTACHMENTS")
+        print(email.attachments)
         email.timestamp = int(request.POST.get('timestamp'))
-        print("ADDED TIME STAMP")
+        print(email.timestamp)
         if verify(API_KEY, request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             print("VERIFIED")
             email.save()
