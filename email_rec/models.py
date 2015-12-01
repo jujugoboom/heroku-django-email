@@ -7,7 +7,7 @@ class Message(models.Model):
     recipient = models.TextField
     subject = models.TextField
     message = models.TextField
-    timestamp = models.DateTimeField
+    timestamp = models.IntegerField
     attachments = models.TextField
 
 
