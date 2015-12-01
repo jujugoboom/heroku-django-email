@@ -3,15 +3,11 @@ from django.shortcuts import render
 import hashlib, hmac
 import tinys3
 from .models import *
-import json
-import logging
-import sys
 
 S3_ACCESS_KEY = 'AKIAJPA62PHGYTEYJSXA'
 S3_SECRET_KEY = 'fnZzvVdXCmKypTjGyJJaaBPVGLcmBLy77pNJP/Yc'
 API_KEY = 'f5fe8fa67f3fdb15a4a5a7f3788c5acb'
 # Create your views here.
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 def index(request):
     if request.method == 'POST':
