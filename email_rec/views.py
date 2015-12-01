@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 def index(request):
     if request.method == 'POST':
         return(recieve_email(request))
+    else:
+        return HttpResponse("OK")
 
 def recieve_email(request):
     logger.warn(json.dumps(request))
