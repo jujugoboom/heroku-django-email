@@ -1,6 +1,8 @@
-Django==1.8.1
 dj-database-url==0.3.0
+Django==1.8.1
+django-postgrespool==0.3.0
 gunicorn==19.3.0
 psycopg2==2.6
-django-postgrespool==0.3.0
+SQLAlchemy==1.0.4
+whitenoise==1.0.6
 tinys3==0.1.11
