@@ -20,7 +20,7 @@ def index(request):
 
 def recieve_email(request):
     logger.warn(json.dumps(request))
-    email = Message
+    email = Message()
     email.sender = request.POST.get('sender')
     email.recipient = request.POST.get('recipient')
     email.subject = request.POST.get('subject', '')
