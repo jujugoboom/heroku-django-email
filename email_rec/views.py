@@ -19,7 +19,7 @@ def index(request):
         return HttpResponse("OK")
 
 def recieve_email(request):
-    logger.warn(json.dumps(request))
+    print(json.dumps(request))
     email = Message()
     email.sender = request.POST.get('sender')
     email.recipient = request.POST.get('recipient')
