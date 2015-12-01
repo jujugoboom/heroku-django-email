@@ -3,17 +3,21 @@ from django.shortcuts import render
 import hashlib, hmac
 import tinys3
 from .models import *
+import logging
+import json
 
 S3_ACCESS_KEY = 'AKIAJPA62PHGYTEYJSXA'
 S3_SECRET_KEY = 'fnZzvVdXCmKypTjGyJJaaBPVGLcmBLy77pNJP/Yc'
 API_KEY = 'f5fe8fa67f3fdb15a4a5a7f3788c5acb'
 # Create your views here.
+logger = logging.getLogger(__name__)
 
 def index(request):
     if request.method == 'POST':
         recieve_email(request)
 
 def recieve_email(request):
+    logger.warn(json.dumps(request))
     email = Message
     email.sender = request.POST.get('sender')
     email.recipient = request.POST.get('recipient')
