@@ -1,1 +1,1 @@
-web: gunicorn email_webapp.wsgi -b 0.0.0.0:$PORT
+web: gunicorn email_webapp.wsgi
