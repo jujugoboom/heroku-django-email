@@ -12,7 +12,8 @@ API_KEY = 'f5fe8fa67f3fdb15a4a5a7f3788c5acb'
 def index(request):
     if request.method == 'POST':
         print('NEW POST... CREATING MESSAGE OBJECT')
-        return(recieve_email(request))
+        recieve_email(request)
+        return HttpResponse("OK")
     else:
         return HttpResponse("OK")
 
