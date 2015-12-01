@@ -14,7 +14,8 @@ def index(request):
     return HttpResponse("OK")
 
 def recieve_email(request):
-    print(json.dump(request.body))
+    body_unicode = request.body.decode('utf-8')
+    print(json.dumps(body_unicode))
     print('NEW MESSAGE')
     if request.method == 'POST':
         print("CREATING MESSAGE")
