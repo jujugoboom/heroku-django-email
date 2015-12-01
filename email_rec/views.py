@@ -42,7 +42,7 @@ def recieve_email(request):
                 conn.upload(f.name,f,'my_bucket')
         email.attachments = attachments
         print("ADDED ATTACHMENTS")
-        email.timestamp = request.POST.get('timestamp')
+        email.timestamp = int(request.POST.get('timestamp'))
         print("ADDED TIME STAMP")
         if verify(API_KEY, request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             print("VERIFIED")
