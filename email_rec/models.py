@@ -3,11 +3,11 @@ from django.db import models
 # Create your models here.
 
 class Message(models.Model):
-    sender = models.TextField
-    recipient = models.TextField
-    subject = models.TextField
-    message = models.TextField
-    timestamp = models.IntegerField
-    attachments = models.TextField
+    sender = models.TextField(null=True, blank=True)
+    recipient = models.TextField(null=True, blank=True)
+    subject = models.TextField(null=True, blank=True)
+    message = models.TextField(null=True, blank=True)
+    timestamp = models.IntegerField(default=0)
+    attachments = models.TextField(null=True, blank=True)
 
 
