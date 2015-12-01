@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import hashlib, hmac
 import tinys3
+import json
 from .models import *
 
 S3_ACCESS_KEY = 'AKIAJPA62PHGYTEYJSXA'
@@ -13,7 +14,7 @@ def index(request):
     return HttpResponse("OK")
 
 def recieve_email(request):
-    print(request.body)
+    print(json.dumps(request.body))
     print('NEW MESSAGE')
     if request.method == 'POST':
         print("CREATING MESSAGE")
