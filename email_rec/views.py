@@ -1,9 +1,11 @@
+import pushover as pushover
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.core import serializers
 from django.http import JsonResponse
 import hashlib, hmac
 import tinys3
+import requests
 import json
 import base64
 import os
@@ -14,6 +16,8 @@ S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY')
 API_KEY = os.environ.get('API_KEY')
 USERNAME = os.environ.get('USERNAME')
 PASSWORD = os.environ.get('PASSWORD')
+PUSH_TOKEN = os.environ.get("PUSH_TOKEN")
+PUSH_USER = os.environ.get("PUSH_USER")
 USERPASS = base64.b64encode(str(USERNAME + ':' + PASSWORD).encode())
 
 def index(request):
@@ -37,6 +41,8 @@ def recieve_email(request):
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             email.save()
+            notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender}
+            requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
         if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS.decode():
             lastmessage = Message.objects.order_by('-id')[0]
