@@ -36,7 +36,7 @@ def recieve_email(request):
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             email.save()
     elif request.method == 'GET':
-        if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS:
+        if str(request.META['HTTP_AUTHORIZATION']) == 'Basic ' + USERPASS:
             print(request.META['id'])
     return HttpResponse('OK')
 
