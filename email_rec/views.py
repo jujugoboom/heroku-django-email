@@ -50,8 +50,8 @@ def recieve_email(request):
                 bucket = conn.get_bucket(AWS_STORAGE_BUCKET_NAME)
                 for key in file.file:
                     k = Key(bucket)
-                    k.key = file.file[key].name + email.timestamp
-                    k.set_contents_from_file(file.file[key])
+                    k.key = 'test' + email.timestamp
+                    k.set_contents_from_string('Test')
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
