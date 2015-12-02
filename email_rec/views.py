@@ -3,12 +3,16 @@ from django.shortcuts import render
 import hashlib, hmac
 import tinys3
 import json
+import base64
+import os
 from .models import *
 
-S3_ACCESS_KEY = 'AKIAJPA62PHGYTEYJSXA'
-S3_SECRET_KEY = 'fnZzvVdXCmKypTjGyJJaaBPVGLcmBLy77pNJP/Yc'
-API_KEY = str('key-f5fe8fa67f3fdb15a4a5a7f3788c5acb').encode()
-# Create your views here.
+S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY')
+S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY')
+API_KEY = os.environ.get('API_KEY')
+USERNAME = os.environ.get('USERNAME')
+PASSWORD = os.environ.get('PASSWORD')
+USERPASS = base64.b64encode(USERNAME + ':' + PASSWORD)
 
 def index(request):
     return HttpResponse("OK")
@@ -29,10 +33,11 @@ def recieve_email(request):
                 conn.upload(f.name,f,'my_bucket')
         email.attachments = attachments
         email.timestamp = int(request.POST.get('timestamp'))
-        if verify(API_KEY, request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
+        if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             email.save()
     elif request.method == 'GET':
-        print(request.META['HTTP_AUTHORIZATION'])
+        if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS:
+            print(request.META['id'])
     return HttpResponse('OK')
 
 
