@@ -3,15 +3,13 @@ from django.shortcuts import render
 from django.core import serializers
 from django.http import JsonResponse
 import hashlib, hmac
-import tinys3
 import requests
 import json
 import base64
 import os
 from .models import *
 from .forms import *
-from boto.s3.connection import S3Connection
-from boto.s3.key import Key
+import boto3
 
 
 API_KEY = os.environ.get('API_KEY')
@@ -46,12 +44,10 @@ def recieve_email(request):
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             email.save()
             if file.is_valid():
-                conn = S3Connection(S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY)
+                conn = boto3.resource('s3')
                 bucket = conn.get_bucket(AWS_STORAGE_BUCKET_NAME)
                 for key in file.file:
-                    k = Key(bucket)
-                    k.key = 'test' + email.timestamp
-                    k.set_contents_from_string('Test')
+                    conn.Object(AWS_STORAGE_BUCKET_NAME, file.file[key].name + email.timestamp).put(Body=open(file.file[key], 'rb'))
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
