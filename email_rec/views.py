@@ -45,7 +45,7 @@ def recieve_email(request):
             if file.is_valid():
                 conn = boto3.resource('s3')
                 for key in file.file:
-                    conn.Object(AWS_STORAGE_BUCKET_NAME, file.file[key].name + email.timestamp).put(Body=open(file.file[key], 'rb'))
+                    conn.Object(AWS_STORAGE_BUCKET_NAME, file.file[key].name + email.timestamp).put(Body=file.file[key])
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
