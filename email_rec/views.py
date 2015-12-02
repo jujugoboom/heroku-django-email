@@ -35,7 +35,7 @@ def recieve_email(request):
             for key in request.FILES:
                 f = open(request.FILES[key],'rb')
                 attachments += f.name + ', '
-                conn.upload(f.name,f,'my_bucket')
+                conn.upload(f.name,f)
         email.attachments = attachments
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
