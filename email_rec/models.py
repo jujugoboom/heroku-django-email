@@ -10,6 +10,6 @@ class Message(models.Model):
     timestamp = models.IntegerField(default=0)
     attachments = models.TextField(null=True, blank=True)
 
-class File(models.Model):
+class FileModel(models.Model):
     file = models.FileField(upload_to='attachments')
 
