@@ -37,7 +37,7 @@ def recieve_email(request):
             email.save()
     elif request.method == 'GET':
         if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS.decode():
-            print(request.META.keys())
+            print(request.META['HTTP_ID'])
     return HttpResponse('OK')
 
 
