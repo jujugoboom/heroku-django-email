@@ -1,4 +1,3 @@
-import pushover as pushover
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.core import serializers
