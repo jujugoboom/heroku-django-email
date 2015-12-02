@@ -37,7 +37,10 @@ def recieve_email(request):
             email.save()
     elif request.method == 'GET':
         if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS.decode():
-            print(request.META['HTTP_ID'])
+            lastmessage = Message.objects.order_by('-id')[0]
+            firstmessage = Message.objects.order_by('id')[0]
+            print(lastmessage.id)
+            print(firstmessage.id)
     return HttpResponse('OK')
 
 
