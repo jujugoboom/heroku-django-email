@@ -10,6 +10,7 @@ import base64
 import os
 from .models import *
 from .forms import *
+from django.core.files.storage import default_storage
 
 
 API_KEY = os.environ.get('API_KEY')
@@ -35,8 +36,7 @@ def recieve_email(request):
             for key in request.FILES:
                 attachments += request.FILES[key].name
             file.file = request.FILES
-            for key in file.file:
-                print(file.file[key].storage)
+            print(default_storage.connection)
         email.attachments = attachments
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
