@@ -33,9 +33,10 @@ def recieve_email(request):
         if len(request.FILES.keys()) > 0:
             conn = tinys3.Connection(S3_ACCESS_KEY,S3_SECRET_KEY,default_bucket='justin-email-attachments')
             for key in request.FILES:
-                f = open(request.FILES[key],'rb')
-                attachments += f.name + ', '
-                conn.upload(f.name,f)
+                print(request.FILES[key])
+                #f = open(request.FILES[key],'rb')
+                #attachments += f.name + ', '
+                #conn.upload(f.name,f)
         email.attachments = attachments
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
