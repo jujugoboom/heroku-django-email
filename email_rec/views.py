@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.core import serializers
+from django.http import JsonResponse
 import hashlib, hmac
 import tinys3
 import json
@@ -39,8 +41,15 @@ def recieve_email(request):
         if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS.decode():
             lastmessage = Message.objects.order_by('-id')[0]
             firstmessage = Message.objects.order_by('id')[0]
-            print(lastmessage.id)
-            print(firstmessage.id)
+            if int(lastmessage.id) - int(firstmessage.id) < 50:
+                messages = Message.objects.all().order_by('id')
+            else:
+                id = int(lastmessage.id) - int(request.META['HTTP_ID'])
+                if id - int(firstmessage.id) < 50:
+                    messages = Message.objects.all().order_by('id')[:id]
+                else:
+                    messages = Message.objects.all().order_by('id')[id-50:id]
+            return JsonResponse(serializers.serialize(json, messages))
     return HttpResponse('OK')
 
 
