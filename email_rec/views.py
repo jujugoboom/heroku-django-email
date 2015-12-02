@@ -35,7 +35,8 @@ def recieve_email(request):
             for key in request.FILES:
                 attachments += request.FILES[key].name
             file.file = request.FILES
-            print(file.file.storage)
+            for key in file.file:
+                print(file.file[key].storage)
         email.attachments = attachments
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
