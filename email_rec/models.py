@@ -11,5 +11,5 @@ class Message(models.Model):
     attachments = models.TextField(null=True, blank=True)
 
 class File(models.Model):
-    file = models.FileField(upload_to='')
+    file = models.FileField(upload_to='attachments')
 

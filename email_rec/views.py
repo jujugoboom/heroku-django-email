@@ -9,6 +9,7 @@ import json
 import base64
 import os
 from .models import *
+from .forms import *
 
 
 API_KEY = os.environ.get('API_KEY')
@@ -30,15 +31,13 @@ def recieve_email(request):
         email.message = request.POST.get('body-plain', '')
         attachments = ''
         if len(request.FILES.keys()) > 0:
-            for key in request.FILES:
-                file = File
-                file.file = request.FILES[key]
-                attachments += request.FILES[key].name
-                file.save()
+            file = FileForm(request.FILES)
         email.attachments = attachments
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             email.save()
+            if file.is_valid():
+                file.save()
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
