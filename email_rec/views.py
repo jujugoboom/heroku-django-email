@@ -10,8 +10,7 @@ import base64
 import os
 from .models import *
 
-S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY')
-S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY')
+
 API_KEY = os.environ.get('API_KEY')
 USERNAME = os.environ.get('USERNAME')
 PASSWORD = os.environ.get('PASSWORD')
@@ -31,12 +30,11 @@ def recieve_email(request):
         email.message = request.POST.get('body-plain', '')
         attachments = ''
         if len(request.FILES.keys()) > 0:
-            conn = tinys3.Connection(S3_ACCESS_KEY,S3_SECRET_KEY,default_bucket='justin-email-attachments')
             for key in request.FILES:
-                print(request.FILES[key])
-                #f = open(request.FILES[key],'rb')
-                #attachments += f.name + ', '
-                #conn.upload(f.name,f)
+                file = File
+                file.file = request.FILES[key]
+                attachments += request.FILES[key].name
+                file.save()
         email.attachments = attachments
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
