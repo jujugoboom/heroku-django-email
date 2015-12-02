@@ -32,6 +32,7 @@ def recieve_email(request):
         attachments = ''
         if len(request.FILES.keys()) > 0:
             for key in request.FILES:
+                print(key)
                 attachments += request.FILES[key].name
             file = FileForm(request.FILES)
         email.attachments = attachments
