@@ -14,42 +14,25 @@ def index(request):
     return HttpResponse("OK")
 
 def recieve_email(request):
-    body_unicode = request.body.decode('utf-8')
-    print(json.dumps(body_unicode))
-    print('NEW MESSAGE')
     if request.method == 'POST':
-        print("CREATING MESSAGE")
         email = Message()
-        print("MESSAGE CREATED")
         email.sender = request.POST.get('sender')
-        print(email.sender)
         email.recipient = request.POST.get('recipient')
-        print(email.recipient)
         email.subject = request.POST.get('subject', '')
-        print(email.subject)
         email.message = request.POST.get('body-plain', '')
-        print(email.message)
         attachments = ''
-        print("ADDING ATTACHMENTS")
         if len(request.FILES.keys()) > 0:
-            print("CONNECTING TO S3")
             conn = tinys3.Connection(S3_ACCESS_KEY,S3_SECRET_KEY,default_bucket='justin-email-attachments')
-            print("CONNECTED TO S3")
             for key in request.FILES:
-                print("ADDING FILE TO S3")
                 f = open(request.FILES[key],'rb')
                 attachments += f.name + ', '
                 conn.upload(f.name,f,'my_bucket')
         email.attachments = attachments
-        print(email.attachments)
         email.timestamp = int(request.POST.get('timestamp'))
-        print(email.timestamp)
         if verify(API_KEY, request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
-            print("VERIFIED")
             email.save()
-            print("SAVED")
-        else:
-            print("NOT VERIFIED")
+    elif request.method == 'GET':
+        print(request.META('Authorization'))
     return HttpResponse('OK')
 
 
