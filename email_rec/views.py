@@ -32,7 +32,7 @@ def recieve_email(request):
         if verify(API_KEY, request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             email.save()
     elif request.method == 'GET':
-        print(request.GET.keys())
+        print(request.META.keys())
     return HttpResponse('OK')
 
 
