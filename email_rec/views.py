@@ -44,7 +44,7 @@ def recieve_email(request):
             if file.is_valid():
                 file.save()
             else:
-                print(file.errors())
+                print(file.errors)
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
@@ -68,5 +68,3 @@ def verify(api_key, token, timestamp, signature):
                              key=api_key,
                              msg='{}{}'.format(timestamp, token).encode(),
                              digestmod=hashlib.sha256).hexdigest()
-
-
