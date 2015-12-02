@@ -21,7 +21,6 @@ USERPASS = base64.b64encode(str(USERNAME + ':' + PASSWORD).encode())
 S3_ACCESS_KEY_ID = os.environ.get('S3_ACCESS_KEY')
 S3_SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
-conn = S3Connection(S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY)
 
 def index(request):
     return HttpResponse("OK")
@@ -45,7 +44,6 @@ def recieve_email(request):
             email.save()
             if file.is_valid():
                 conn = boto3.resource('s3')
-                bucket = conn.get_bucket(AWS_STORAGE_BUCKET_NAME)
                 for key in file.file:
                     conn.Object(AWS_STORAGE_BUCKET_NAME, file.file[key].name + email.timestamp).put(Body=open(file.file[key], 'rb'))
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
