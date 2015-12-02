@@ -7,12 +7,12 @@ import base64
 import os
 from .models import *
 
-S3_ACCESS_KEY = str(os.environ.get('S3_ACCESS_KEY'))
-S3_SECRET_KEY = str(os.environ.get('S3_SECRET_KEY'))
-API_KEY = str(os.environ.get('API_KEY'))
-USERNAME = str(os.environ.get('USERNAME'))
-PASSWORD = str(os.environ.get('PASSWORD'))
-USERPASS = base64.b64encode(USERNAME + ':' + PASSWORD)
+S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY')
+S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY')
+API_KEY = os.environ.get('API_KEY')
+USERNAME = os.environ.get('USERNAME')
+PASSWORD = os.environ.get('PASSWORD')
+USERPASS = base64.b64encode(str(USERNAME + ':' + PASSWORD).encode())
 
 def index(request):
     return HttpResponse("OK")
@@ -36,7 +36,7 @@ def recieve_email(request):
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             email.save()
     elif request.method == 'GET':
-        if str(request.META['HTTP_AUTHORIZATION']) == 'Basic ' + USERPASS:
+        if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS.decode():
             print(request.META['id'])
     return HttpResponse('OK')
 
