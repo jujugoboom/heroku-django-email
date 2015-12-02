@@ -30,9 +30,8 @@ def recieve_email(request):
         email.subject = request.POST.get('subject', '')
         email.message = request.POST.get('body-plain', '')
         attachments = ''
-        file = FileForm()
+        files = []
         if len(request.FILES.keys()) > 0:
-            files = []
             for key in request.FILES:
                 file = FileModel(request.FILES[key])
                 files.append(file)
