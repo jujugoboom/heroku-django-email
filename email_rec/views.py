@@ -49,7 +49,7 @@ def recieve_email(request):
                     messages = Message.objects.all().order_by('id')[:id]
                 else:
                     messages = Message.objects.all().order_by('id')[id-50:id]
-            return JsonResponse(serializers.serialize(json, messages))
+            return JsonResponse(serializers.serialize('json', messages))
     return HttpResponse('OK')
 
 
