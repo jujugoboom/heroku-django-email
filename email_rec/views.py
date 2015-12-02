@@ -30,19 +30,19 @@ def recieve_email(request):
         email.subject = request.POST.get('subject', '')
         email.message = request.POST.get('body-plain', '')
         attachments = ''
-        files = []
+        file = FileForm()
         if len(request.FILES.keys()) > 0:
             for key in request.FILES:
-                file = FileModel(request.FILES[key])
-                files.append(file)
                 attachments += request.FILES[key].name
+            file = FileForm(request.FILES)
         email.attachments = attachments
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             email.save()
-            if len(files) > 0:
-                for file in files:
-                    file.save()
+            if file.is_valid():
+                file.save()
+            else:
+                print(file.errors)
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
