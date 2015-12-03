@@ -42,16 +42,9 @@ def recieve_email(request):
                     attachments += file.name
                     signed_request = sign_s3(file.name, file.content_type)
                     response = requests.put(signed_request, data=file)
-                    print('SERVER RESPONSE: ' + json.dumps(response.json))
+                    print('SERVER RESPONSE: ' + response.content)
             email.attachments = attachments
             email.save()
-            if len(files) > 0:
-                print('UPLOADING FILES')
-                for file in files:
-                    print("UPLOADING " + file.file.name)
-                    signed_request = sign_s3(file.file.name, file.file.content_type)
-                    response = requests.put(signed_request, data=file.file)
-                    print('SERVER RESPONSE: ' + response.json)
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
