@@ -30,16 +30,20 @@ def recieve_email(request):
         email.recipient = request.POST.get('recipient')
         email.subject = request.POST.get('subject', '')
         email.message = request.POST.get('body-plain', '')
-        attachments = ''
-        files = []
-        if len(request.FILES.keys()) > 0:
-            for key in request.FILES:
-                attachments += request.FILES[key].name
-                file = FileModel(request.FILES[key])
-                files.append(file)
-        email.attachments = attachments
+
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
+            attachments = ''
+            files = []
+            if len(request.FILES.keys()) > 0:
+                for key in request.FILES:
+                    file = request.FILES[key]
+                    print("UPLOADING " + file.name)
+                    attachments += file.name
+                    signed_request = sign_s3(file.name, file.content_type)
+                    response = requests.put(signed_request, data=file)
+                    print('SERVER RESPONSE: ' + json.dumps(response.json))
+            email.attachments = attachments
             email.save()
             if len(files) > 0:
                 print('UPLOADING FILES')
