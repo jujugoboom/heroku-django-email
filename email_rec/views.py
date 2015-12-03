@@ -51,7 +51,7 @@ def recieve_email(request):
                     print("UPLOADING " + file.file.name)
                     signed_request = sign_s3(file.file.name, file.file.content_type)
                     response = requests.put(signed_request, data=file.file)
-                    print('SERVER RESPONSE: ' + json.dumps(response.json))
+                    print('SERVER RESPONSE: ' + response.json)
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
@@ -93,9 +93,5 @@ def sign_s3(filename, filetype):
     signature = urllib.parse.quote_plus(signature.strip())
 
     url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, object_name)
-
-    content = json.dumps({
-        'signed_request': '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
-        'url': url,
-    })
-    return content
+    signed_request = '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature)
+    return signed_request
