@@ -9,8 +9,6 @@ import base64
 import os
 from .models import *
 from .forms import *
-import boto3
-
 
 API_KEY = os.environ.get('API_KEY')
 USERNAME = os.environ.get('USERNAME')
@@ -18,9 +16,6 @@ PASSWORD = os.environ.get('PASSWORD')
 PUSH_TOKEN = os.environ.get("PUSH_TOKEN")
 PUSH_USER = os.environ.get("PUSH_USER")
 USERPASS = base64.b64encode(str(USERNAME + ':' + PASSWORD).encode())
-S3_ACCESS_KEY_ID = os.environ.get('S3_ACCESS_KEY')
-S3_SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_KEY')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
 
 def index(request):
     return HttpResponse("OK")
@@ -43,9 +38,7 @@ def recieve_email(request):
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             email.save()
             if file.is_valid():
-                conn = boto3.resource('s3')
-                for key in file.file:
-                    conn.Object(AWS_STORAGE_BUCKET_NAME, file.file[key].name + email.timestamp).put(Body=file.file[key])
+                file.save()
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':

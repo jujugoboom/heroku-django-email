@@ -6,3 +6,4 @@ django-postgrespool==0.3.0
 tinys3==0.1.11
 requests==2.8.1
 boto3==1.2.2
+django-storages-redux==1.3

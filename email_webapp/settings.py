@@ -37,9 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'storages',
     'email_rec'
 )
 
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -106,3 +108,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
+
+S3_ACCESS_KEY_ID = os.environ.get('S3_ACCESS_KEY')
+
+S3_SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_KEY')
+
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
