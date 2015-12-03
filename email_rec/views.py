@@ -47,6 +47,8 @@ def recieve_email(request):
                     signed_request = sign_s3(file.file[key].name, file.file[key].content_type)
                     response = requests.put(signed_request, data=file.file[key])
                     print("SERVER RESPONSE: " + response.json())
+            else:
+                print(file.errors)
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
