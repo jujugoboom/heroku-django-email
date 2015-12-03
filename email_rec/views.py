@@ -48,7 +48,7 @@ def recieve_email(request):
                     response = requests.put(signed_request, data=file.file[key])
                     print("SERVER RESPONSE: " + response.json())
             else:
-                print(file.errors)
+                print('CANNOT UPLOAD FILE')
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
