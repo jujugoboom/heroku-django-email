@@ -31,24 +31,23 @@ def recieve_email(request):
         email.subject = request.POST.get('subject', '')
         email.message = request.POST.get('body-plain', '')
         attachments = ''
-        file = FileForm()
+        files = []
         if len(request.FILES.keys()) > 0:
             for key in request.FILES:
                 attachments += request.FILES[key].name
-            file.file = request.FILES
+                file = FileModel(request.FILES[key])
+                files.append(file)
         email.attachments = attachments
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             email.save()
-            if file.is_valid():
-                print("UPLOADING FILES")
-                for key in file.file:
-                    print("UPLOADING " + file.file[key].name)
-                    signed_request = sign_s3(file.file[key].name, file.file[key].content_type)
-                    response = requests.put(signed_request, data=file.file[key])
-                    print("SERVER RESPONSE: " + response.json())
-            else:
-                print('CANNOT UPLOAD FILE')
+            if len(files) > 0:
+                print('UPLOADING FILES')
+                for file in files:
+                    print("UPLOADING " + file.name)
+                    signed_request = sign_s3(file.name, file.content_type)
+                    response = requests.put(signed_request, data=file)
+                    print('SERVER RESPONSE: ' + json.dumps(response.json))
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
