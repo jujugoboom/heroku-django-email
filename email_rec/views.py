@@ -41,8 +41,8 @@ def recieve_email(request):
                 for key in request.FILES:
                     file = request.FILES[key]
                     filename = file.name
-                    temp = filename.split()
-                    filename = temp[:-1] + str(email.timestamp) + temp[-1]
+                    temp = filename.split('.')
+                    filename = str(temp[:-1]) + str(email.timestamp) + str(temp[-1])
                     attachments += filename
                     s3.Bucket(S3_BUCKET).put_object(Key=filename, Body=file)
             email.attachments = attachments
