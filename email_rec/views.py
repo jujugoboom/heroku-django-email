@@ -1,12 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render
 from django.core import serializers
 from django.http import JsonResponse
 import hashlib, hmac
 import requests
-import json
 import base64
-import time
 import os
 from .models import *
 import boto3
@@ -31,11 +28,9 @@ def recieve_email(request):
         email.recipient = request.POST.get('recipient')
         email.subject = request.POST.get('subject', '')
         email.message = request.POST.get('body-plain', '')
-
         email.timestamp = int(request.POST.get('timestamp'))
         if verify(API_KEY.encode(), request.POST.get('token'), request.POST.get('timestamp'), request.POST.get('signature')):
             attachments = ''
-            files = []
             if len(request.FILES.keys()) > 0:
                 s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
                 for key in request.FILES:
