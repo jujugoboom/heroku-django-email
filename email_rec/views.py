@@ -42,7 +42,7 @@ def recieve_email(request):
                     attachments += file.name
                     signed_request = sign_s3(file.name, file.content_type)
                     response = requests.put(signed_request, data=file)
-                    print('SERVER RESPONSE: ' + json.dump(response.content))
+                    print('SERVER RESPONSE: ' + json.dumps(response.content))
             email.attachments = attachments
             email.save()
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
