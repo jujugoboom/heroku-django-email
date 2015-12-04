@@ -48,14 +48,11 @@ def recieve_email(request):
         if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS.decode():
             lastmessage = Message.objects.order_by('-id')[0]
             firstmessage = Message.objects.order_by('id')[0]
-            if int(lastmessage.id) - int(firstmessage.id) < 50:
+            if int(lastmessage.id) - int(firstmessage.id) <= 50:
                 messages = Message.objects.all().order_by('-id')
             else:
                 id = int(lastmessage.id) - int(request.META['HTTP_ID'])
-                if id - int(firstmessage.id) < 50:
-                    messages = Message.objects.all().order_by('-id')[id:]
-                else:
-                    messages = Message.objects.all().order_by('-id')[id:id+50]
+                messages = Message.objects.all().order_by('-id')[id-50:id]
             return JsonResponse(serializers.serialize('json', messages), safe=False)
     return HttpResponse('OK')
 
