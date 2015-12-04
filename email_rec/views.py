@@ -40,8 +40,8 @@ def recieve_email(request):
                 s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
                 for key in request.FILES:
                     file = request.FILES[key]
-                    attachments += file.name + email.timestamp
-                    s3.Bucket(S3_BUCKET).put_object(Key=file.name + email.timestamp, Body=file)
+                    attachments += file.name + str(email.timestamp)
+                    s3.Bucket(S3_BUCKET).put_object(Key=file.name + str(email.timestamp), Body=file)
             email.attachments = attachments
             email.save()
             notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
