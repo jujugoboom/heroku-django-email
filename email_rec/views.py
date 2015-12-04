@@ -37,7 +37,7 @@ def recieve_email(request):
             attachments = ''
             files = []
             if len(request.FILES.keys()) > 0:
-                s3 = boto3.resource('s3')
+                s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
                 for key in request.FILES:
                     file = request.FILES[key]
                     print("UPLOADING " + file.name)
