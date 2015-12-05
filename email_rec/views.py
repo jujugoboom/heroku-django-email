@@ -46,6 +46,8 @@ def recieve_email(request):
             requests.post("https://api.pushover.net/1/messages.json", data=notification)
     elif request.method == 'GET':
         if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS.decode():
+            if Message.objects.all() == []:
+                return HttpResponse('No Messages')
             lastmessage = Message.objects.order_by('-id')[0]
             firstmessage = Message.objects.order_by('id')[0]
             if int(lastmessage.id) - int(firstmessage.id) <= 50:
