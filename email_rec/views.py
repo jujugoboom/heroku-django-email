@@ -66,6 +66,7 @@ def recieve_email(request):
             trash.timestamp = email.timestamp
             trash.attachments = email.attachments
             trash.save()
+            email.delete()
     return HttpResponse('OK')
 
 
