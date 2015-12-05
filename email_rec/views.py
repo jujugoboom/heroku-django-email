@@ -54,6 +54,18 @@ def recieve_email(request):
                 id = int(lastmessage.id) - int(request.META['HTTP_ID'])
                 messages = Message.objects.all().order_by('-id')[id-50:id]
             return JsonResponse(serializers.serialize('json', messages), safe=False)
+    elif request.method == 'DELETE':
+        if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS.decode():
+            i = int(request.META['HTTP_ID'])
+            email = Message.objects.all().order_by('-id')[i]
+            trash = TrashEmail()
+            trash.sender = email.sender
+            trash.recipient = email.recipient
+            trash.subject = email.subject
+            trash.message = email.message
+            trash.timestamp = email.timestamp
+            trash.attachments = email.attachments
+            trash.save()
     return HttpResponse('OK')
 
 
