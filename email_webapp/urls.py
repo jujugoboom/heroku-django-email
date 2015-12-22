@@ -19,5 +19,5 @@ import email_rec.views
 
 urlpatterns = [
     url(r'^$', email_rec.views.index, name='index'),
-    url(r'^message', email_rec.views.recieve_email, name='message')
+    url(r'^message', email_rec.views.handle_request, name='message')
 ]
