@@ -23,9 +23,9 @@ def index(request):
 
 def handle_request(request):
     if request.method == 'POST':
-        recieve_message(request)
+        return recieve_message(request)
     elif request.method == 'GET':
-        retreive_message(request)
+        return retreive_message(request)
     elif request.method == 'DELETE':
         delete_message(request)
     return HttpResponse('OK')
@@ -52,6 +52,7 @@ def recieve_message(request):
         email.save()
         notification = {'token' : PUSH_TOKEN, 'user' : PUSH_USER, 'title' : 'New Email', 'message' : 'New Email from ' + email.sender + ' "' + email.subject + '"'}
         requests.post("https://api.pushover.net/1/messages.json", data=notification)
+        return HttpResponse('OK')
 
 def retreive_message(request):
     if request.META['HTTP_AUTHORIZATION'] == 'Basic ' + USERPASS.decode():
